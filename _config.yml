@@ -5,6 +5,11 @@ title: Power Models (gurobipy)
 author: Robert Mieth
 logo: icons.png
 
+## Website 
+baseurl: "/power_models-grbpy"
+url: "https://mieth-robert.github.io/"
+
+
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
