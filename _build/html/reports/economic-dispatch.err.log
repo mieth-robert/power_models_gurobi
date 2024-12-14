@@ -1,0 +1,80 @@
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/nbclient/client.py", line 1314, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 684, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+# import needed librarys
+
+import numpy as np
+import gurobipy as gp
+from gurobipy import GRB
+
+# define paramters
+
+n_gen = 4 # number of generators 
+c2 = np.array([0.148, 0.034, 0.158, 0.106]) # quadratic term of generator cost function 
+c1 = np.array([199.4, 232.7, 246.1, 168.0]) # linear term of generator cost function 
+c0 = np.array([16625, 16806, 15483, 16689]) # constat term of generator cost function
+
+D = 1500 # demand 
+
+# define the model
+
+m = gp.Model()
+m.setParam('OutputFlag', 0)
+
+# variables
+p = m.addVars(4, lb=0, ub=GRB.INFINITY, name="p") # generator production 
+
+# constraints
+m.addConstr(p.sum() == D, name="lam") # energy balance
+
+# define objective
+m.setObjective(
+    sum(c2[i]*(p[i]**2) + c1[i]*p[i] + c0[i] for i in range(n_gen)),
+    GRB.MINIMIZE
+)
+
+# run the model
+m.optimize()
+
+# prepare results
+p_res = [m.getVarByName(f'p[i]').x for i in range(n_gen)]
+
+# explore results
+for i, value in enumerate(p_res):
+    print(f"Production of generator {i + 1}: {value:.2f} MW")
+------------------
+
+----- stdout -----
+Set parameter Username
+----- stdout -----
+Academic license - for non-commercial use only - expires 2025-11-15
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+Cell [0;32mIn[1], line 37[0m
+[1;32m     34[0m m[38;5;241m.[39moptimize()
+[1;32m     36[0m [38;5;66;03m# prepare results[39;00m
+[0;32m---> 37[0m p_res [38;5;241m=[39m [[43mm[49m[38;5;241;43m.[39;49m[43mgetVarByName[49m[43m([49m[38;5;124;43mf[39;49m[38;5;124;43m'[39;49m[38;5;124;43mp[i][39;49m[38;5;124;43m'[39;49m[43m)[49m[38;5;241;43m.[39;49m[43mx[49m [38;5;28;01mfor[39;00m i [38;5;129;01min[39;00m [38;5;28mrange[39m(n_gen)]
+[1;32m     39[0m [38;5;66;03m# explore results[39;00m
+[1;32m     40[0m [38;5;28;01mfor[39;00m i, value [38;5;129;01min[39;00m [38;5;28menumerate[39m(p_res):
+
+[0;31mAttributeError[0m: 'NoneType' object has no attribute 'x'
+

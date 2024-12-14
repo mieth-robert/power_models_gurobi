@@ -1,0 +1,15 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+- file: notebooks/1_linear_prog_mini_example.ipynb
+- file: notebooks/2_load_duration.ipynb
+- file: notebooks/3_capacity_planning_basic.ipynb
+- file: notebooks/4_ed_with_res.ipynb
+- file: notebooks/5_welfare_max_ed.ipynb
+- file: notebooks/6_scuc_with_prices_and_ess.ipynb
+- file: notebooks/7_optimal_power_flow.ipynb
+- file: notebooks/8_bat+solar_investment.ipynb
+

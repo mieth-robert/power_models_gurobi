@@ -1,0 +1,624 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Basic Capacity Planning &#8212; Power Models (gurobipy)</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/3_capacity_planning_basic';</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Economic Dispatch" href="4_ed_with_res.html" />
+    <link rel="prev" title="Load Duration Curve" href="2_load_duration.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/icons.png" class="logo__image only-light" alt="Power Models (gurobipy) - Home"/>
+    <img src="../_static/icons.png" class="logo__image only-dark pst-js-only" alt="Power Models (gurobipy) - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Intro to Power System and Electricity Market Models
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_linear_prog_mini_example.html">Linear Programming Mini Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_load_duration.html">Load Duration Curve</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Basic Capacity Planning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_ed_with_res.html">Economic Dispatch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5_welfare_max_ed.html">Welfare Maximizing Market Clearing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_scuc_with_prices_and_ess.html">Unit Commitment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_optimal_power_flow.html">Optimal Power Flow and Locational Marginal Prices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="8_bat%2Bsolar_investment.html">Battery and Solar Investment</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fnotebooks/3_capacity_planning_basic.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/3_capacity_planning_basic.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Basic Capacity Planning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="basic-capacity-planning">
+<h1>Basic Capacity Planning<a class="headerlink" href="#basic-capacity-planning" title="Link to this heading">#</a></h1>
+<p>Capacity planning is the process of figuring out the optimal amount of electricity generation capacity needed to reliably meet future demand within a power grid.</p>
+<p><strong>1. Load packages</strong></p>
+<ul class="simple">
+<li><p>We are using the gurobipy package to formulate a mathematical model and solve it.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gurobipy</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">from</span> <span class="nn">gurobipy</span> <span class="kn">import</span> <span class="n">GRB</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>2. Define parameters</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Symbol</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Data</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>G</p></td>
+<td><p>Number of generators</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>H</p></td>
+<td><p>Number of hours</p></td>
+<td><p>8760</p></td>
+</tr>
+<tr class="row-even"><td><p>O</p></td>
+<td><p>Number of segments in piecewise load duration curve</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(FC_i\)</span></p></td>
+<td><p>Fixed cost</p></td>
+<td><p>[140, 120]</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(VC_i\)</span></p></td>
+<td><p>Variable cost</p></td>
+<td><p>[0.0238, 0.0336]</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(ldcm_o\)</span></p></td>
+<td><p>slope of piecewise load duration curve in GW</p></td>
+<td><p>[-0.003, -0.0004427]</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(ldcn_o\)</span></p></td>
+<td><p>intercepts of piecewise load duration curve in GW</p></td>
+<td><p>[15, 8.728]</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># high cap (HC) and low cap (LC) cost functions</span>
+<span class="c1"># in M$/GW </span>
+<span class="n">G</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">H</span> <span class="o">=</span> <span class="mi">8760</span>
+<span class="n">fixed</span> <span class="o">=</span> <span class="p">[</span><span class="mi">140</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span> <span class="c1"># HC LC</span>
+<span class="n">varia</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0238</span><span class="p">,</span> <span class="mf">0.0336</span><span class="p">]</span> <span class="c1"># HC LC</span>
+
+<span class="c1"># piecewise load duration curve in GW</span>
+<span class="n">ldc_m</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.003</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0004427</span><span class="p">]</span> <span class="c1"># slope </span>
+<span class="n">ldc_n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mf">8.628</span><span class="p">]</span> <span class="c1"># intercepts</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>3. Define mathematical model</strong></p>
+<p>Objective function:</p>
+<ul class="simple">
+<li><p>Minimize the sum cost <em><span class="math notranslate nohighlight">\(c_i\)</span></em>, which depends on the capacity <em><span class="math notranslate nohighlight">\(\overline{p}_{i}\)</span></em> and production <em><span class="math notranslate nohighlight">\(p_{i,h}\)</span></em> of each generator <em>i</em>.</p></li>
+</ul>
+<p>Decision variables:</p>
+<ul class="simple">
+<li><p><em><span class="math notranslate nohighlight">\(p_{i,h}\)</span></em> production of generator <em>i</em> in hour <em>h</em>.</p></li>
+<li><p><em><span class="math notranslate nohighlight">\(\overline{p}_{i}\)</span></em> capacity of generator <em>i</em>.</p></li>
+</ul>
+<p>Constraints:</p>
+<ul class="simple">
+<li><p>The cost <em><span class="math notranslate nohighlight">\(c_i\)</span></em> is equal to the fixed cost <em><span class="math notranslate nohighlight">\(FC_{i}\)</span></em> multiplied by the capacity <em><span class="math notranslate nohighlight">\(\overline{p}_{i}\)</span></em> and the variable cost <em><span class="math notranslate nohighlight">\(VC_{i}\)</span></em> multiplied by the production <em><span class="math notranslate nohighlight">\(p_i\)</span></em>.</p></li>
+<li><p>The sum of capacity <em><span class="math notranslate nohighlight">\(\overline{p}_{i}\)</span></em> needs to be greater equal to the load duration curve.</p></li>
+<li><p>The output of each generator <em><span class="math notranslate nohighlight">\(p_i\)</span></em> has to greater equal to <span class="math notranslate nohighlight">\(0\)</span> and cannot exceed <em><span class="math notranslate nohighlight">\(\overline{p}_{i}\)</span></em>.</p></li>
+</ul>
+<div class="amsmath math notranslate nohighlight" id="equation-5fde72e9-19fe-46f9-a3af-f315bf0277cc">
+<span class="eqno">(2)<a class="headerlink" href="#equation-5fde72e9-19fe-46f9-a3af-f315bf0277cc" title="Permalink to this equation">#</a></span>\[\begin{align}
+\min \quad &amp; \sum_{i=1}^{G} c_i  \hspace{-4cm}\\
+\text{s.t.}\quad &amp; c_i = \left( FC_{i} \overline{p}_{i} + \sum_{h=1}^{H} VC_i p_{i,h} \right) &amp;&amp; \forall h \in [H] \\
+&amp; \sum_{i=1}^{G} p_{i,h} \geq ldcm_{o}*h + ldcn_{o} &amp;&amp; \forall h \in [H], o=1,2 \\
+&amp; 0 \leq p_{i,h} \leq  \overline{p}_{i} &amp;&amp; \forall i \in [G] , h \in [H]  
+\end{align}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+<span class="n">m</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s1">&#39;OutputFlag&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">cost</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">addVars</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cost&quot;</span><span class="p">)</span> <span class="c1"># $</span>
+<span class="n">cap</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">addVars</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cap&quot;</span><span class="p">)</span> <span class="c1"># installed capacity in GW</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">addVars</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;p&quot;</span><span class="p">)</span> <span class="c1"># hourly generator utilization</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
+    <span class="c1"># compute total cost </span>
+    <span class="n">m</span><span class="o">.</span><span class="n">addConstr</span><span class="p">(</span><span class="n">cost</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">fixed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">cap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">varia</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">h</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">H</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">addConstr</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">cap</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
+        <span class="c1"># production must at least meet demand</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">addConstr</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">h</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">G</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="n">ldc_m</span><span class="p">[</span><span class="n">o</span><span class="p">]</span><span class="o">*</span><span class="n">h</span> <span class="o">+</span> <span class="n">ldc_n</span><span class="p">[</span><span class="n">o</span><span class="p">])</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">setObjective</span><span class="p">(</span><span class="n">cost</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">GRB</span><span class="o">.</span><span class="n">MINIMIZE</span><span class="p">)</span>
+
+<span class="n">m</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Set parameter Username
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Academic license - for non-commercial use only - expires 2025-11-15
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>4. Inspect the solution</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;High cap generation capacity in GW: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">getVarByName</span><span class="p">(</span><span class="s1">&#39;cap[0]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">X</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Low cap generation capacity in GW:  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">getVarByName</span><span class="p">(</span><span class="s1">&#39;cap[1]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">X</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>High cap generation capacity in GW: 8.88
+Low cap generation capacity in GW:  6.12
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2_load_duration.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Load Duration Curve</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4_ed_with_res.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Economic Dispatch</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Robert Mieth
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
