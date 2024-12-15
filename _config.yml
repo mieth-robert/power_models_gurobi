@@ -39,12 +39,61 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/executablebooks/jupyter-book  # Online location of your book
+  url: https://github.com/mieth-robert/power_models_gurobi  # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
-  branch: master  # Which branch of the repository should be used when creating links (optional)
+  branch: main  # Which branch of the repository should be used when creating links (optional)
 
 # Add GitHub buttons to your book
 # See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
   use_issues_button: true
   use_repository_button: true
+
+# Jekyll build settings (only modify if you know what you're doing)
+
+# Site settings
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+      toc: true
+      toc_label: "  On this page"
+      toc_icon: "list-ul"
+      excerpt: ''
+
+favicon_path: "images/logo/favicon.ico"
+
+# Markdown Processing
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+sass:
+  style: compressed
+
+collections:
+  build:
+    output: true
+    permalink: /:path.html
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  - scripts/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+plugins:
+  - jekyll-redirect-from
+  - jekyll-scholar
+
+# Jupyter Book version - DO NOT CHANGE THIS. It is generated when a new book is created
+jupyter_book_version: "0.6.4"
