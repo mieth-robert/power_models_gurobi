@@ -345,7 +345,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -361,6 +363,15 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#content">Content</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -376,7 +387,10 @@
 <p>This collection is meant to be an introduction to and collection of standard model formulations for power systems.
 For now, it focuses on (linear) optimal power flow formulations to support techno-econoic power system analyses.
 These materials have been created for the course ISE 487: <em>Energy System Modeling and Optimization</em> at Rutgers University.</p>
-<p>This is the <em>gurobipy</em> version of this material. A <em>Julia/JuMP</em> is comming soon. A <em>cvxpy</em> and a <em>AMPL</em> version is planned.</p>
+<p>This is the <em>gurobipy</em> version of this material. A <em>Julia/JuMP</em> version is comming soon. A <em>cvxpy</em> and a <em>AMPL</em> version is planned.</p>
+<p>We are constantly working on expanding and improving this material. If you want to contribute or report bugs/errors please reach out. You will find my contact information <a class="reference external" href="https://sites.rutgers.edu/ropes-lab/">here</a>.</p>
+<section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/1_linear_prog_mini_example.html">Linear Programming Mini Example</a></li>
@@ -389,6 +403,14 @@ These materials have been created for the course ISE 487: <em>Energy System Mode
 <li class="toctree-l1"><a class="reference internal" href="notebooks/8_bat%2Bsolar_investment.html">Battery and Solar Investment</a></li>
 </ul>
 </div>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<p>Thanks to:</p>
+<ul class="simple">
+<li><p>Thomas Mortimer</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -436,6 +458,23 @@ These materials have been created for the course ISE 487: <em>Energy System Mode
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#content">Content</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
